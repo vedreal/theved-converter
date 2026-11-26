@@ -56,9 +56,9 @@
   .updated button{font-family:inherit; font-size:13px; font-weight:700; color:var(--red); background:none;
     border:none; cursor:pointer; text-decoration:underline; margin-left:6px;}
 
-  /* ---------- Converter cards ---------- */
-  .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; margin-top:26px;}
-  @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+  /* ---------- Converter card (single, all-in-one) ---------- */
+  .grid{display:block; max-width:660px; margin:26px auto 0;}
+  @media (max-width:900px){ .grid{max-width:100%;} }
   .card{background:var(--cream-card); border:2px solid var(--navy); border-radius:4px; overflow:hidden;
     box-shadow:4px 4px 0 rgba(30,42,68,.15);}
   .card-head{background:var(--navy); color:var(--cream); padding:14px 18px;}
@@ -135,69 +135,35 @@
 
   <div class="grid">
 
-    <!-- 1. Currency -->
-    <section class="card" id="card-fx">
-      <div class="card-head"><h2 data-i18n="fxTitle">Mata Uang</h2><p>IDR &harr; USD &harr; HKD</p></div>
+    <!-- Single all-in-one converter: currency & gold in one card -->
+    <section class="card" id="card-cv">
+      <div class="card-head"><h2 data-i18n="cvTitle">Konverter</h2><p data-i18n="cvSub">Mata uang &amp; emas — semua dalam satu tempat</p></div>
       <div class="card-body">
         <label data-i18n="amount">Jumlah</label>
-        <input type="number" id="fx-amount" value="1000000" min="0" step="any" inputmode="decimal">
+        <input type="number" id="cv-amount" value="1000000" min="0" step="any" inputmode="decimal">
         <div class="row">
           <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="fx-from"><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
+            <select id="cv-from">
+              <option value="IDR" data-opt="IDR">IDR — Rupiah</option>
+              <option value="USD" data-opt="USD">USD — Dolar AS</option>
+              <option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option>
+              <option value="GRAM" data-opt="GRAM">Gram emas</option>
+              <option value="XAU" data-opt="XAU">XAU — Troy Oz</option>
+            </select>
           </div>
-          <button class="swap" id="fx-swap" title="Tukar">&#8646;</button>
+          <button class="swap" id="cv-swap" title="Tukar">&#8646;</button>
           <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="fx-to"><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
+            <select id="cv-to">
+              <option value="USD" data-opt="USD">USD — Dolar AS</option>
+              <option value="IDR" data-opt="IDR">IDR — Rupiah</option>
+              <option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option>
+              <option value="GRAM" data-opt="GRAM">Gram emas</option>
+              <option value="XAU" data-opt="XAU">XAU — Troy Oz</option>
+            </select>
           </div>
         </div>
-        <div class="chips" data-chips="fx">
-          <button data-v="1">1</button><button data-v="10">10</button><button data-v="100">100</button><button data-v="1000">1.000</button><button data-v="1000000">1 jt</button>
-        </div>
-        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="fx-result">—</div><div class="rate" id="fx-rate"></div></div>
-      </div>
-    </section>
-
-    <!-- 2. Gold grams -->
-    <section class="card" id="card-gold">
-      <div class="card-head"><h2 data-i18n="goldTitle">Emas per Gram</h2><p data-i18n="goldSub">Gram &harr; IDR / USD / HKD</p></div>
-      <div class="card-body">
-        <label data-i18n="amount">Jumlah</label>
-        <input type="number" id="gold-amount" value="10" min="0" step="any" inputmode="decimal">
-        <div class="row">
-          <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="gold-from"><option value="GRAM" data-opt="GRAM">Gram emas</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
-          </div>
-          <button class="swap" id="gold-swap" title="Tukar">&#8646;</button>
-          <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="gold-to"><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="GRAM" data-opt="GRAM">Gram emas</option></select>
-          </div>
-        </div>
-        <div class="chips" data-chips="gold">
-          <button data-v="1">1 g</button><button data-v="5">5 g</button><button data-v="10">10 g</button><button data-v="25">25 g</button><button data-v="100">100 g</button>
-        </div>
-        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="gold-result">—</div><div class="rate" id="gold-rate"></div></div>
-      </div>
-    </section>
-
-    <!-- 3. XAU -->
-    <section class="card" id="card-xau">
-      <div class="card-head"><h2 data-i18n="xauTitle">XAU / Troy Ounce</h2><p>XAU &harr; USD / HKD / IDR</p></div>
-      <div class="card-body">
-        <label data-i18n="amount">Jumlah</label>
-        <input type="number" id="xau-amount" value="1" min="0" step="any" inputmode="decimal">
-        <div class="row">
-          <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="xau-from"><option value="XAU" data-opt="XAU">XAU — Troy Oz</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option></select>
-          </div>
-          <button class="swap" id="xau-swap" title="Tukar">&#8646;</button>
-          <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="xau-to"><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="XAU" data-opt="XAU">XAU — Troy Oz</option></select>
-          </div>
-        </div>
-        <div class="chips" data-chips="xau">
-          <button data-v="0.1">0,1 oz</button><button data-v="0.5">0,5 oz</button><button data-v="1">1 oz</button><button data-v="5">5 oz</button><button data-v="10">10 oz</button>
-        </div>
-        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="xau-result">—</div><div class="rate" id="xau-rate"></div></div>
+        <div class="chips" id="cv-chips"></div>
+        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="cv-result">—</div><div class="rate" id="cv-rate"></div></div>
       </div>
     </section>
 
@@ -234,6 +200,7 @@ const I18N = {
     amount: "Jumlah", from: "Dari", to: "Ke", result: "Hasil",
     fxTitle: "Mata Uang", goldTitle: "Emas per Gram", goldSub: "Gram \u2194 IDR / USD / HKD",
     xauTitle: "XAU / Troy Ounce",
+    cvTitle: "Konverter", cvSub: "Mata uang & emas \u2014 semua dalam satu tempat",
     refTitle: "Acuan Harga",
     refText: "Harga diambil langsung dari pasar spot global dan diperbarui otomatis setiap 60 detik \u2014 harga yang sama seperti yang tampil di TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31,1034768 gram.",
     footer: "dibuat dengan gaya cover KDP TheVed. Harga hanya untuk informasi, bukan saran investasi.",
@@ -247,6 +214,7 @@ const I18N = {
     amount: "Amount", from: "From", to: "To", result: "Result",
     fxTitle: "Currency", goldTitle: "Gold per Gram", goldSub: "Gram \u2194 IDR / USD / HKD",
     xauTitle: "XAU / Troy Ounce",
+    cvTitle: "Converter", cvSub: "Currency & gold \u2014 everything in one place",
     refTitle: "Price Reference",
     refText: "Prices come straight from the global spot market and refresh automatically every 60 seconds \u2014 the same prices shown on TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31.1034768 grams.",
     footer: "made in TheVed KDP cover style. Prices are for information only, not investment advice.",
@@ -260,6 +228,7 @@ const I18N = {
     amount: "\u91d1\u984d", from: "\u5f9e", to: "\u5230", result: "\u7d50\u679c",
     fxTitle: "\u8ca8\u5e63", goldTitle: "\u6bcf\u514b\u9ec3\u91d1", goldSub: "\u514b \u2194 \u5370\u76e7 / \u7f8e\u5143 / \u6e2f\u5143",
     xauTitle: "XAU / \u91d1\u76ce\u53f8",
+    cvTitle: "\u63db\u7b97\u5668", cvSub: "\u8ca8\u5e63\u8207\u9ec3\u91d1 \u2014 \u5168\u90e8\u96c6\u4e2d\u4e00\u8655",
     refTitle: "\u50f9\u683c\u4f9d\u64da",
     refText: "\u50f9\u683c\u4f86\u81ea\u5168\u7403\u73fe\u8ca8\u5e02\u5834\uff0c\u6bcf 60 \u79d2\u81ea\u52d5\u66f4\u65b0\u2014\u8207 TradingView \u986f\u793a\u7684\u50f9\u683c\u76f8\u540c\uff08XAU/USD\u3001USD/IDR\u3001USD/HKD\uff09\u30021 \u91d1\u76ce\u53f8 = 31.1034768 \u514b\u3002",
     footer: "\u63a1\u7528 TheVed KDP \u5c01\u9762\u98a8\u683c\u88fd\u4f5c\u3002\u50f9\u683c\u50c5\u4f9b\u53c3\u8003\uff0c\u4e0d\u69cb\u6210\u6295\u8cc7\u5efa\u8b70\u3002",
@@ -322,7 +291,7 @@ function renderOne(prefix){
   const one = convert(1, from, to);
   rateEl.textContent = "1 " + unitLabel(from, 1) + " = " + (isCur(to) ? fmtRate(one, to) : fmt(one, 4) + " " + unitLabel(to, one));
 }
-function renderAll(){ ["fx","gold","xau"].forEach(renderOne); renderLive(); }
+function renderAll(){ renderOne("cv"); renderLive(); }
 function renderLive(){
   document.getElementById("live-xau").innerHTML = "$" + fmt(state.xauUsd, 2);
   document.getElementById("live-idr").textContent = fmt(state.rates.IDR, 0);
@@ -364,23 +333,37 @@ function setLang(l){
 }
 document.querySelectorAll(".lang-switch button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 document.getElementById("refresh-btn").addEventListener("click", fetchPrices);
-["fx","gold","xau"].forEach(p => {
-  ["amount","from","to"].forEach(k => document.getElementById(p + "-" + k).addEventListener("input", () => renderOne(p)));
-  document.getElementById(p + "-swap").addEventListener("click", () => {
-    const a = document.getElementById(p + "-from"), b = document.getElementById(p + "-to");
-    const tmp = a.value; a.value = b.value; b.value = tmp;
-    // If the swapped "from" is not a valid option in its select, keep the pair sane.
-    renderOne(p);
-  });
-  document.querySelectorAll('[data-chips="' + p + '"] button').forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.getElementById(p + "-amount").value = btn.dataset.v;
-      document.querySelectorAll('[data-chips="' + p + '"] button').forEach(x => x.classList.remove("active"));
-      btn.classList.add("active");
-      renderOne(p);
+const CHIP_PRESETS = {
+  IDR: [[1000,"1 rb"],[10000,"10 rb"],[100000,"100 rb"],[1000000,"1 jt"],[10000000,"10 jt"]],
+  USD: [[1,"1"],[10,"10"],[100,"100"],[500,"500"],[1000,"1.000"]],
+  HKD: [[1,"1"],[10,"10"],[100,"100"],[500,"500"],[1000,"1.000"]],
+  GRAM: [[1,"1 g"],[5,"5 g"],[10,"10 g"],[25,"25 g"],[100,"100 g"]],
+  XAU: [[0.1,"0,1 oz"],[0.5,"0,5 oz"],[1,"1 oz"],[5,"5 oz"],[10,"10 oz"]]
+};
+function renderChips(){
+  const from = document.getElementById("cv-from").value;
+  const box = document.getElementById("cv-chips");
+  box.innerHTML = "";
+  (CHIP_PRESETS[from] || CHIP_PRESETS.USD).forEach(([v, label]) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.addEventListener("click", () => {
+      document.getElementById("cv-amount").value = v;
+      box.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      renderOne("cv");
     });
+    box.appendChild(b);
   });
+}
+["amount","from","to"].forEach(k => document.getElementById("cv-" + k).addEventListener("input", () => { if (k === "from") renderChips(); renderOne("cv"); }));
+document.getElementById("cv-swap").addEventListener("click", () => {
+  const a = document.getElementById("cv-from"), b = document.getElementById("cv-to");
+  const tmp = a.value; a.value = b.value; b.value = tmp;
+  renderChips();
+  renderOne("cv");
 });
+renderChips();
 setLang("id");
 fetchPrices();
 setInterval(fetchPrices, 60000);

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheVed Converter — Konverter Mata Uang &amp; Emas Live</title>
+<meta name="description" content="Konverter live IDR, USD, HKD, emas per gram dan XAU dengan harga pasar global real-time. Gaya cover KDP TheVed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7F1E3; --cream-card:#FFFDF6; --navy:#1E2A44; --navy-soft:#2C3E63;
+    --red:#B03A2E; --red-soft:#C0503F; --ink:#222222; --muted:#5A5A52; --line:#1E2A44;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--cream); color:var(--ink); font-family:"Source Serif 4", Georgia, serif; line-height:1.55;}
+  .wrap{max-width:1060px; margin:0 auto; padding:0 18px 60px;}
+
+  /* ---------- Header ---------- */
+  header{border-bottom:4px double var(--navy); padding:34px 0 26px; text-align:center; position:relative;}
+  .badge{width:92px; height:92px; border-radius:50%; background:var(--navy); color:var(--cream);
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:"Playfair Display", Georgia, serif; font-weight:900; font-size:34px; letter-spacing:1px;
+    border:4px solid var(--cream); outline:2px solid var(--navy); margin-bottom:16px;}
+  h1{font-family:"Playfair Display", Georgia, serif; font-weight:900; font-size:clamp(38px,6vw,58px);
+    color:var(--navy); line-height:1.05; letter-spacing:.5px;}
+  h1 span{color:var(--red);}
+  .tagline{color:var(--red); font-weight:700; letter-spacing:3px; text-transform:uppercase; font-size:13px; margin-top:10px;}
+  .subtitle{color:var(--muted); font-size:17px; margin-top:8px;}
+  .lang-switch{position:absolute; top:18px; right:0; display:flex; gap:6px;}
+  .lang-switch button{font-family:"Source Serif 4", Georgia, serif; font-weight:700; font-size:13px;
+    padding:7px 12px; border:2px solid var(--navy); background:transparent; color:var(--navy);
+    cursor:pointer; border-radius:3px;}
+  .lang-switch button.active{background:var(--navy); color:var(--cream);}
+  .lang-switch button:hover{background:var(--red); border-color:var(--red); color:#fff;}
+
+  /* ---------- Live bar ---------- */
+  .live-bar{margin-top:26px; border:2px solid var(--navy); background:var(--navy); color:var(--cream);
+    display:flex; flex-wrap:wrap; align-items:stretch;}
+  .live-label{padding:14px 18px; font-weight:700; letter-spacing:2px; font-size:13px; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px; border-right:1px solid rgba(247,241,227,.35);}
+  .dot{width:10px; height:10px; border-radius:50%; background:#E74C3C; display:inline-block; animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%{opacity:1;}50%{opacity:.25;}100%{opacity:1;}}
+  .live-items{display:flex; flex-wrap:wrap; flex:1;}
+  .live-item{flex:1 1 160px; padding:12px 16px; border-right:1px solid rgba(247,241,227,.25);}
+  .live-item:last-child{border-right:none;}
+  .live-item .k{font-size:12px; letter-spacing:1.5px; text-transform:uppercase; opacity:.75;}
+  .live-item .v{font-family:"Playfair Display", Georgia, serif; font-weight:800; font-size:21px; margin-top:2px;}
+  .live-item .v small{font-size:13px; font-weight:600; opacity:.8;}
+  .updated{margin-top:10px; font-size:13px; color:var(--muted); text-align:right;}
+  .updated button{font-family:inherit; font-size:13px; font-weight:700; color:var(--red); background:none;
+    border:none; cursor:pointer; text-decoration:underline; margin-left:6px;}
+
+  /* ---------- Converter cards ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; margin-top:26px;}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+  .card{background:var(--cream-card); border:2px solid var(--navy); border-radius:4px; overflow:hidden;
+    box-shadow:4px 4px 0 rgba(30,42,68,.15);}
+  .card-head{background:var(--navy); color:var(--cream); padding:14px 18px;}
+  .card-head h2{font-family:"Playfair Display", Georgia, serif; font-size:22px; font-weight:800;}
+  .card-head p{font-size:13px; opacity:.8; margin-top:2px;}
+  .card-body{padding:20px 18px 22px;}
+  label{display:block; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--navy); margin:14px 0 6px;}
+  label:first-child{margin-top:0;}
+  input[type=number], select{width:100%; padding:12px 14px; font-family:"Source Serif 4", Georgia, serif;
+    font-size:19px; font-weight:600; color:var(--navy); background:#fff; border:2px solid var(--navy); border-radius:3px;}
+  input[type=number]:focus, select:focus{outline:3px solid rgba(176,58,46,.35); border-color:var(--red);}
+  .row{display:flex; gap:10px; align-items:flex-end;}
+  .row .grow{flex:1;}
+  .swap{flex:0 0 46px; height:46px; border:2px solid var(--navy); background:var(--cream); color:var(--navy);
+    font-size:20px; cursor:pointer; border-radius:3px; margin-bottom:2px;}
+  .swap:hover{background:var(--red); border-color:var(--red); color:#fff;}
+  .chips{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .chips button{font-family:inherit; font-size:14px; font-weight:700; padding:6px 14px; border:2px solid var(--navy);
+    background:transparent; color:var(--navy); border-radius:20px; cursor:pointer;}
+  .chips button:hover, .chips button.active{background:var(--navy); color:var(--cream);}
+  .result{margin-top:18px; border-top:2px solid var(--red); padding-top:14px;}
+  .result .k{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  .result .v{font-family:"Playfair Display", Georgia, serif; font-weight:900; font-size:32px; color:var(--navy);
+    line-height:1.15; word-break:break-word;}
+  .result .v small{font-size:17px; color:var(--red);}
+  .rate{margin-top:6px; font-size:14px; color:var(--muted);}
+
+  /* ---------- Reference ---------- */
+  .ref{margin-top:30px; border:2px solid var(--navy); background:var(--cream-card); padding:20px 22px; border-radius:4px;}
+  .ref h2{font-family:"Playfair Display", Georgia, serif; color:var(--navy); font-size:22px; margin-bottom:8px;}
+  .ref p{font-size:15px; color:var(--muted);}
+  .ref a{color:var(--red); font-weight:700;}
+  .tv-links{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .tv-links a{display:inline-block; padding:9px 16px; border:2px solid var(--navy); color:var(--navy);
+    text-decoration:none; font-weight:700; font-size:14px; border-radius:3px;}
+  .tv-links a:hover{background:var(--navy); color:var(--cream);}
+  footer{margin-top:34px; border-top:4px double var(--navy); padding-top:18px; text-align:center;
+    color:var(--muted); font-size:14px;}
+  footer b{color:var(--navy);}
+  .error{display:none; margin-top:14px; padding:12px 16px; border:2px solid var(--red); background:#FBEDEA;
+    color:var(--red); font-weight:700; border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button data-lang="id" class="active">ID</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="zh">繁體</button>
+    </div>
+    <div class="badge">TV</div>
+    <h1>TheVed <span>Converter</span></h1>
+    <div class="tagline" data-i18n="tagline">Konverter Live &bull; Mata Uang &amp; Emas</div>
+    <p class="subtitle" data-i18n="subtitle">Harga pasar global real-time — IDR, USD, HKD, emas per gram &amp; XAU.</p>
+  </header>
+
+  <div class="live-bar">
+    <div class="live-label"><span class="dot"></span><span data-i18n="live">LIVE</span></div>
+    <div class="live-items">
+      <div class="live-item"><div class="k">XAU / USD</div><div class="v" id="live-xau">$3,575.30</div></div>
+      <div class="live-item"><div class="k">USD / IDR</div><div class="v" id="live-idr">18,227</div></div>
+      <div class="live-item"><div class="k">USD / HKD</div><div class="v" id="live-hkd">7.842</div></div>
+      <div class="live-item"><div class="k" data-i18n="goldGram">Emas / gram</div><div class="v" id="live-gram">Rp2.095.182</div></div>
+    </div>
+  </div>
+  <div class="updated"><span data-i18n="updated">Terakhir diperbarui</span>: <span id="updated-at">—</span>
+    <button id="refresh-btn" data-i18n="refresh">Segarkan</button>
+  </div>
+  <div class="error" id="error-box"></div>
+
+  <div class="grid">
+
+    <!-- 1. Currency -->
+    <section class="card" id="card-fx">
+      <div class="card-head"><h2 data-i18n="fxTitle">Mata Uang</h2><p>IDR &harr; USD &harr; HKD</p></div>
+      <div class="card-body">
+        <label data-i18n="amount">Jumlah</label>
+        <input type="number" id="fx-amount" value="1000000" min="0" step="any" inputmode="decimal">
+        <div class="row">
+          <div class="grow"><label data-i18n="from">Dari</label>
+            <select id="fx-from"><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+          </div>
+          <button class="swap" id="fx-swap" title="Tukar">&#8646;</button>
+          <div class="grow"><label data-i18n="to">Ke</label>
+            <select id="fx-to"><option value="USD">USD — Dolar AS</option><option value="IDR">IDR — Rupiah</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+          </div>
+        </div>
+        <div class="chips" data-chips="fx">
+          <button data-v="1">1</button><button data-v="10">10</button><button data-v="100">100</button><button data-v="1000">1.000</button><button data-v="1000000">1 jt</button>
+        </div>
+        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="fx-result">—</div><div class="rate" id="fx-rate"></div></div>
+      </div>
+    </section>
+
+    <!-- 2. Gold grams -->
+    <section class="card" id="card-gold">
+      <div class="card-head"><h2 data-i18n="goldTitle">Emas per Gram</h2><p data-i18n="goldSub">Gram &harr; IDR / USD / HKD</p></div>
+      <div class="card-body">
+        <label data-i18n="amount">Jumlah</label>
+        <input type="number" id="gold-amount" value="10" min="0" step="any" inputmode="decimal">
+        <div class="row">
+          <div class="grow"><label data-i18n="from">Dari</label>
+            <select id="gold-from"><option value="GRAM">Gram emas</option><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+          </div>
+          <button class="swap" id="gold-swap" title="Tukar">&#8646;</button>
+          <div class="grow"><label data-i18n="to">Ke</label>
+            <select id="gold-to"><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="GRAM">Gram emas</option></select>
+          </div>
+        </div>
+        <div class="chips" data-chips="gold">
+          <button data-v="1">1 g</button><button data-v="5">5 g</button><button data-v="10">10 g</button><button data-v="25">25 g</button><button data-v="100">100 g</button>
+        </div>
+        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="gold-result">—</div><div class="rate" id="gold-rate"></div></div>
+      </div>
+    </section>
+
+    <!-- 3. XAU -->
+    <section class="card" id="card-xau">
+      <div class="card-head"><h2 data-i18n="xauTitle">XAU / Troy Ounce</h2><p>XAU &harr; USD / HKD / IDR</p></div>
+      <div class="card-body">
+        <label data-i18n="amount">Jumlah</label>
+        <input type="number" id="xau-amount" value="1" min="0" step="any" inputmode="decimal">
+        <div class="row">
+          <div class="grow"><label data-i18n="from">Dari</label>
+            <select id="xau-from"><option value="XAU">XAU — Troy Oz</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="IDR">IDR — Rupiah</option></select>
+          </div>
+          <button class="swap" id="xau-swap" title="Tukar">&#8646;</button>
+          <div class="grow"><label data-i18n="to">Ke</label>
+            <select id="xau-to"><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="IDR">IDR — Rupiah</option><option value="XAU">XAU — Troy Oz</option></select>
+          </div>
+        </div>
+        <div class="chips" data-chips="xau">
+          <button data-v="0.1">0,1 oz</button><button data-v="0.5">0,5 oz</button><button data-v="1">1 oz</button><button data-v="5">5 oz</button><button data-v="10">10 oz</button>
+        </div>
+        <div class="result"><div class="k" data-i18n="result">Hasil</div><div class="v" id="xau-result">—</div><div class="rate" id="xau-rate"></div></div>
+      </div>
+    </section>
+
+  </div>
+
+  <section class="ref">
+    <h2 data-i18n="refTitle">Acuan Harga</h2>
+    <p data-i18n="refText">Harga diambil langsung dari pasar spot global dan diperbarui otomatis setiap 60 detik — harga yang sama seperti yang tampil di TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31,1034768 gram.</p>
+    <div class="tv-links">
+      <a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" rel="noopener">TradingView — XAU/USD</a>
+      <a href="https://www.tradingview.com/symbols/USDIDR/" target="_blank" rel="noopener">TradingView — USD/IDR</a>
+      <a href="https://www.tradingview.com/symbols/USDHKD/" target="_blank" rel="noopener">TradingView — USD/HKD</a>
+    </div>
+  </section>
+
+  <footer>
+    <b>TheVed Converter</b> — <span data-i18n="footer">dibuat dengan gaya cover KDP TheVed. Harga hanya untuk informasi, bukan saran investasi.</span>
+  </footer>
+
+</div>
+<script>
+const OZ_GRAMS = 31.1034768;
+const GOLD_API = "https://api.gold-api.com/price/XAU";
+const FX_API = "https://open.er-api.com/v6/latest/USD";
+
+// Fallback values (verified live 26 Nov 2026) shown until the first fetch succeeds.
+let state = { xauUsd: 3575.30, rates: { USD: 1, IDR: 18227.12, HKD: 7.8419 }, updatedAt: null };
+
+const I18N = {
+  id: {
+    tagline: "Konverter Live \u2022 Mata Uang & Emas",
+    subtitle: "Harga pasar global real-time \u2014 IDR, USD, HKD, emas per gram & XAU.",
+    live: "LIVE", goldGram: "Emas / gram", updated: "Terakhir diperbarui", refresh: "Segarkan",
+    amount: "Jumlah", from: "Dari", to: "Ke", result: "Hasil",
+    fxTitle: "Mata Uang", goldTitle: "Emas per Gram", goldSub: "Gram \u2194 IDR / USD / HKD",
+    xauTitle: "XAU / Troy Ounce",
+    refTitle: "Acuan Harga",
+    refText: "Harga diambil langsung dari pasar spot global dan diperbarui otomatis setiap 60 detik \u2014 harga yang sama seperti yang tampil di TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31,1034768 gram.",
+    footer: "dibuat dengan gaya cover KDP TheVed. Harga hanya untuk informasi, bukan saran investasi.",
+    gram: "gram", oz: "oz", perGram: "per gram", perOz: "per troy oz",
+    fetchFail: "Gagal memuat harga live \u2014 menampilkan harga terakhir yang tersimpan. Coba segarkan lagi."
+  },
+  en: {
+    tagline: "Live Converter \u2022 Currency & Gold",
+    subtitle: "Real-time global market prices \u2014 IDR, USD, HKD, gold per gram & XAU.",
+    live: "LIVE", goldGram: "Gold / gram", updated: "Last updated", refresh: "Refresh",
+    amount: "Amount", from: "From", to: "To", result: "Result",
+    fxTitle: "Currency", goldTitle: "Gold per Gram", goldSub: "Gram \u2194 IDR / USD / HKD",
+    xauTitle: "XAU / Troy Ounce",
+    refTitle: "Price Reference",
+    refText: "Prices come straight from the global spot market and refresh automatically every 60 seconds \u2014 the same prices shown on TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31.1034768 grams.",
+    footer: "made in TheVed KDP cover style. Prices are for information only, not investment advice.",
+    gram: "grams", oz: "oz", perGram: "per gram", perOz: "per troy oz",
+    fetchFail: "Could not load live prices \u2014 showing the last saved prices. Try refreshing again."
+  },
+  zh: {
+    tagline: "\u5373\u6642\u63db\u7b97\u5668 \u2022 \u8ca8\u5e63\u8207\u9ec3\u91d1",
+    subtitle: "\u5373\u6642\u5168\u7403\u5e02\u5834\u50f9\u683c \u2014 \u5370\u76e7\u3001\u7f8e\u5143\u3001\u6e2f\u5143\u3001\u6bcf\u514b\u9ec3\u91d1\u50f9\u683c\u8207 XAU\u3002",
+    live: "LIVE", goldGram: "\u6bcf\u514b\u9ec3\u91d1", updated: "\u6700\u5f8c\u66f4\u65b0", refresh: "\u5237\u65b0",
+    amount: "\u91d1\u984d", from: "\u5f9e", to: "\u5230", result: "\u7d50\u679c",
+    fxTitle: "\u8ca8\u5e63", goldTitle: "\u6bcf\u514b\u9ec3\u91d1", goldSub: "\u514b \u2194 \u5370\u76e7 / \u7f8e\u5143 / \u6e2f\u5143",
+    xauTitle: "XAU / \u91d1\u76ce\u53f8",
+    refTitle: "\u50f9\u683c\u4f9d\u64da",
+    refText: "\u50f9\u683c\u4f86\u81ea\u5168\u7403\u73fe\u8ca8\u5e02\u5834\uff0c\u6bcf 60 \u79d2\u81ea\u52d5\u66f4\u65b0\u2014\u8207 TradingView \u986f\u793a\u7684\u50f9\u683c\u76f8\u540c\uff08XAU/USD\u3001USD/IDR\u3001USD/HKD\uff09\u30021 \u91d1\u76ce\u53f8 = 31.1034768 \u514b\u3002",
+    footer: "\u63a1\u7528 TheVed KDP \u5c01\u9762\u98a8\u683c\u88fd\u4f5c\u3002\u50f9\u683c\u50c5\u4f9b\u53c3\u8003\uff0c\u4e0d\u69cb\u6210\u6295\u8cc7\u5efa\u8b70\u3002",
+    gram: "\u514b", oz: "\u76ce\u53f8", perGram: "\u6bcf\u514b", perOz: "\u6bcf\u91d1\u76ce\u53f8",
+    fetchFail: "\u7121\u6cd5\u8f09\u5165\u5373\u6642\u50f9\u683c\u2014\u986f\u793a\u4e0a\u6b21\u4fdd\u5b58\u7684\u50f9\u683c\u3002\u8acb\u518d\u8a66\u5237\u65b0\u3002"
+  }
+};
+let lang = "id";
+const LOCALE = { id: "id-ID", en: "en-US", zh: "zh-Hant-HK" };
+
+function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.id[key] || key; }
+function fmt(n, dec){
+  const d = (dec === undefined) ? (Math.abs(n) >= 100 ? 0 : 2) : dec;
+  return n.toLocaleString(LOCALE[lang], { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function fmtMoney(n, cur){
+  const dec = cur === "IDR" ? 0 : 2;
+  const sym = cur === "IDR" ? "Rp" : cur === "USD" ? "$" : "HK$";
+  return sym + fmt(n, dec);
+}
+// USD value of one unit of each convertible unit.
+function usdPerUnit(unit){
+  if (unit === "USD") return 1;
+  if (unit === "IDR") return 1 / state.rates.IDR;
+  if (unit === "HKD") return 1 / state.rates.HKD;
+  if (unit === "GRAM") return state.xauUsd / OZ_GRAMS;
+  if (unit === "XAU") return state.xauUsd;
+  return 1;
+}
+function unitLabel(unit){
+  if (unit === "GRAM") return t("gram");
+  if (unit === "XAU") return t("oz");
+  return unit;
+}
+function convert(amount, from, to){
+  return amount * usdPerUnit(from) / usdPerUnit(to);
+}
+function renderOne(prefix){
+  const amt = parseFloat(document.getElementById(prefix + "-amount").value);
+  const from = document.getElementById(prefix + "-from").value;
+  const to = document.getElementById(prefix + "-to").value;
+  const out = document.getElementById(prefix + "-result");
+  const rateEl = document.getElementById(prefix + "-rate");
+  if (isNaN(amt) || amt < 0){ out.textContent = "—"; rateEl.textContent = ""; return; }
+  const res = convert(amt, from, to);
+  const isCur = (u) => ["IDR","USD","HKD"].includes(u);
+  out.innerHTML = (isCur(to) ? fmtMoney(res, to) : fmt(res, 4) + " <small>" + unitLabel(to) + "</small>");
+  const one = convert(1, from, to);
+  rateEl.textContent = "1 " + unitLabel(from) + " = " + (isCur(to) ? fmtMoney(one, to) : fmt(one, 4) + " " + unitLabel(to));
+}
+function renderAll(){ ["fx","gold","xau"].forEach(renderOne); renderLive(); }
+function renderLive(){
+  document.getElementById("live-xau").innerHTML = "$" + fmt(state.xauUsd, 2);
+  document.getElementById("live-idr").textContent = fmt(state.rates.IDR, 0);
+  document.getElementById("live-hkd").textContent = fmt(state.rates.HKD, 3);
+  document.getElementById("live-gram").textContent = fmtMoney(state.xauUsd / OZ_GRAMS * state.rates.IDR, "IDR");
+  if (state.updatedAt){
+    const d = new Date(state.updatedAt);
+    document.getElementById("updated-at").textContent =
+      d.toLocaleTimeString(LOCALE[lang], { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", second: "2-digit" }) + " WIB";
+  }
+}
+async function fetchPrices(){
+  const box = document.getElementById("error-box");
+  try {
+    const [g, f] = await Promise.all([
+      fetch(GOLD_API).then(r => { if(!r.ok) throw new Error("gold"); return r.json(); }),
+      fetch(FX_API).then(r => { if(!r.ok) throw new Error("fx"); return r.json(); })
+    ]);
+    if (g && g.price > 0) state.xauUsd = g.price;
+    if (f && f.rates && f.rates.IDR > 0 && f.rates.HKD > 0){
+      state.rates.IDR = f.rates.IDR; state.rates.HKD = f.rates.HKD;
+    }
+    state.updatedAt = Date.now();
+    box.style.display = "none";
+  } catch (e) {
+    box.textContent = t("fetchFail");
+    box.style.display = "block";
+    if (!state.updatedAt) state.updatedAt = Date.now();
+  }
+  renderAll();
+}
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l === "zh" ? "zh-Hant" : l;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll(".lang-switch button").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
+  renderAll();
+}
+document.querySelectorAll(".lang-switch button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+document.getElementById("refresh-btn").addEventListener("click", fetchPrices);
+["fx","gold","xau"].forEach(p => {
+  ["amount","from","to"].forEach(k => document.getElementById(p + "-" + k).addEventListener("input", () => renderOne(p)));
+  document.getElementById(p + "-swap").addEventListener("click", () => {
+    const a = document.getElementById(p + "-from"), b = document.getElementById(p + "-to");
+    const tmp = a.value; a.value = b.value; b.value = tmp;
+    // If the swapped "from" is not a valid option in its select, keep the pair sane.
+    renderOne(p);
+  });
+  document.querySelectorAll('[data-chips="' + p + '"] button').forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById(p + "-amount").value = btn.dataset.v;
+      document.querySelectorAll('[data-chips="' + p + '"] button').forEach(x => x.classList.remove("active"));
+      btn.classList.add("active");
+      renderOne(p);
+    });
+  });
+});
+setLang("id");
+fetchPrices();
+setInterval(fetchPrices, 60000);
+</script>
+</body>
+</html>

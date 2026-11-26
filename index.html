@@ -97,9 +97,6 @@
   .tv-links a{display:inline-block; padding:9px 16px; border:2px solid var(--navy); color:var(--navy);
     text-decoration:none; font-weight:700; font-size:14px; border-radius:3px;}
   .tv-links a:hover{background:var(--navy); color:var(--cream);}
-  footer{margin-top:34px; border-top:4px double var(--navy); padding-top:18px; text-align:center;
-    color:var(--muted); font-size:14px;}
-  footer b{color:var(--navy);}
   .error{display:none; margin-top:14px; padding:12px 16px; border:2px solid var(--red); background:#FBEDEA;
     color:var(--red); font-weight:700; border-radius:3px;}
 </style>
@@ -179,9 +176,6 @@
     </div>
   </section>
 
-  <footer>
-    <b>TheVed Converter</b> — <span data-i18n="footer">dibuat dengan gaya cover KDP TheVed. Harga hanya untuk informasi, bukan saran investasi.</span>
-  </footer>
 
 </div>
 <script>
@@ -203,7 +197,6 @@ const I18N = {
     cvTitle: "Konverter", cvSub: "Mata uang & emas \u2014 semua dalam satu tempat",
     refTitle: "Acuan Harga",
     refText: "Harga diambil langsung dari pasar spot global dan diperbarui otomatis setiap 60 detik \u2014 harga yang sama seperti yang tampil di TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31,1034768 gram.",
-    footer: "dibuat dengan gaya cover KDP TheVed. Harga hanya untuk informasi, bukan saran investasi.",
     gram: "gram", oz: "oz", perGram: "per gram", perOz: "per troy oz",
     fetchFail: "Gagal memuat harga live \u2014 menampilkan harga terakhir yang tersimpan. Coba segarkan lagi."
   },
@@ -217,7 +210,6 @@ const I18N = {
     cvTitle: "Converter", cvSub: "Currency & gold \u2014 everything in one place",
     refTitle: "Price Reference",
     refText: "Prices come straight from the global spot market and refresh automatically every 60 seconds \u2014 the same prices shown on TradingView (XAU/USD, USD/IDR, USD/HKD). 1 troy ounce = 31.1034768 grams.",
-    footer: "made in TheVed KDP cover style. Prices are for information only, not investment advice.",
     gram: "grams", oz: "oz", perGram: "per gram", perOz: "per troy oz",
     fetchFail: "Could not load live prices \u2014 showing the last saved prices. Try refreshing again."
   },
@@ -231,7 +223,6 @@ const I18N = {
     cvTitle: "\u63db\u7b97\u5668", cvSub: "\u8ca8\u5e63\u8207\u9ec3\u91d1 \u2014 \u5168\u90e8\u96c6\u4e2d\u4e00\u8655",
     refTitle: "\u50f9\u683c\u4f9d\u64da",
     refText: "\u50f9\u683c\u4f86\u81ea\u5168\u7403\u73fe\u8ca8\u5e02\u5834\uff0c\u6bcf 60 \u79d2\u81ea\u52d5\u66f4\u65b0\u2014\u8207 TradingView \u986f\u793a\u7684\u50f9\u683c\u76f8\u540c\uff08XAU/USD\u3001USD/IDR\u3001USD/HKD\uff09\u30021 \u91d1\u76ce\u53f8 = 31.1034768 \u514b\u3002",
-    footer: "\u63a1\u7528 TheVed KDP \u5c01\u9762\u98a8\u683c\u88fd\u4f5c\u3002\u50f9\u683c\u50c5\u4f9b\u53c3\u8003\uff0c\u4e0d\u69cb\u6210\u6295\u8cc7\u5efa\u8b70\u3002",
     gram: "\u514b", oz: "\u76ce\u53f8", perGram: "\u6bcf\u514b", perOz: "\u6bcf\u91d1\u76ce\u53f8",
     fetchFail: "\u7121\u6cd5\u8f09\u5165\u5373\u6642\u50f9\u683c\u2014\u986f\u793a\u4e0a\u6b21\u4fdd\u5b58\u7684\u50f9\u683c\u3002\u8acb\u518d\u8a66\u5237\u65b0\u3002"
   }

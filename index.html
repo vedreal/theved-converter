@@ -137,11 +137,11 @@
         <input type="number" id="fx-amount" value="1000000" min="0" step="any" inputmode="decimal">
         <div class="row">
           <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="fx-from"><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+            <select id="fx-from"><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
           </div>
           <button class="swap" id="fx-swap" title="Tukar">&#8646;</button>
           <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="fx-to"><option value="USD">USD — Dolar AS</option><option value="IDR">IDR — Rupiah</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+            <select id="fx-to"><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
           </div>
         </div>
         <div class="chips" data-chips="fx">
@@ -159,11 +159,11 @@
         <input type="number" id="gold-amount" value="10" min="0" step="any" inputmode="decimal">
         <div class="row">
           <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="gold-from"><option value="GRAM">Gram emas</option><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option></select>
+            <select id="gold-from"><option value="GRAM" data-opt="GRAM">Gram emas</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option></select>
           </div>
           <button class="swap" id="gold-swap" title="Tukar">&#8646;</button>
           <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="gold-to"><option value="IDR">IDR — Rupiah</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="GRAM">Gram emas</option></select>
+            <select id="gold-to"><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="GRAM" data-opt="GRAM">Gram emas</option></select>
           </div>
         </div>
         <div class="chips" data-chips="gold">
@@ -181,11 +181,11 @@
         <input type="number" id="xau-amount" value="1" min="0" step="any" inputmode="decimal">
         <div class="row">
           <div class="grow"><label data-i18n="from">Dari</label>
-            <select id="xau-from"><option value="XAU">XAU — Troy Oz</option><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="IDR">IDR — Rupiah</option></select>
+            <select id="xau-from"><option value="XAU" data-opt="XAU">XAU — Troy Oz</option><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option></select>
           </div>
           <button class="swap" id="xau-swap" title="Tukar">&#8646;</button>
           <div class="grow"><label data-i18n="to">Ke</label>
-            <select id="xau-to"><option value="USD">USD — Dolar AS</option><option value="HKD">HKD — Dolar Hong Kong</option><option value="IDR">IDR — Rupiah</option><option value="XAU">XAU — Troy Oz</option></select>
+            <select id="xau-to"><option value="USD" data-opt="USD">USD — Dolar AS</option><option value="HKD" data-opt="HKD">HKD — Dolar Hong Kong</option><option value="IDR" data-opt="IDR">IDR — Rupiah</option><option value="XAU" data-opt="XAU">XAU — Troy Oz</option></select>
           </div>
         </div>
         <div class="chips" data-chips="xau">
@@ -263,6 +263,11 @@ const I18N = {
 };
 let lang = "id";
 const LOCALE = { id: "id-ID", en: "en-US", zh: "zh-Hant-HK" };
+const OPT_I18N = {
+  id:  { IDR: "IDR — Rupiah", USD: "USD — Dolar AS", HKD: "HKD — Dolar Hong Kong", GRAM: "Gram emas", XAU: "XAU — Troy Oz" },
+  en:  { IDR: "IDR — Indonesian Rupiah", USD: "USD — US Dollar", HKD: "HKD — Hong Kong Dollar", GRAM: "Gold (grams)", XAU: "XAU — Troy Oz" },
+  zh:  { IDR: "IDR — 印尼盾", USD: "USD — 美元", HKD: "HKD — 港元", GRAM: "黃金（克）", XAU: "XAU — 金衡盎司" }
+};
 
 function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.id[key] || key; }
 function fmt(n, dec){
@@ -271,6 +276,13 @@ function fmt(n, dec){
 }
 function fmtMoney(n, cur){
   const dec = cur === "IDR" ? 0 : 2;
+  const sym = cur === "IDR" ? "Rp" : cur === "USD" ? "$" : "HK$";
+  return sym + fmt(n, dec);
+}
+// Rate-line formatting: enough decimals that tiny per-unit rates (e.g. 1 IDR in USD) stay readable.
+function fmtRate(n, cur){
+  const a = Math.abs(n);
+  const dec = a < 0.0001 ? 6 : a < 0.01 ? 5 : a < 1 ? 4 : 2;
   const sym = cur === "IDR" ? "Rp" : cur === "USD" ? "$" : "HK$";
   return sym + fmt(n, dec);
 }
@@ -283,8 +295,8 @@ function usdPerUnit(unit){
   if (unit === "XAU") return state.xauUsd;
   return 1;
 }
-function unitLabel(unit){
-  if (unit === "GRAM") return t("gram");
+function unitLabel(unit, n){
+  if (unit === "GRAM") return (lang === "en" && n !== 1) ? "grams" : t("gram");
   if (unit === "XAU") return t("oz");
   return unit;
 }
@@ -300,9 +312,9 @@ function renderOne(prefix){
   if (isNaN(amt) || amt < 0){ out.textContent = "—"; rateEl.textContent = ""; return; }
   const res = convert(amt, from, to);
   const isCur = (u) => ["IDR","USD","HKD"].includes(u);
-  out.innerHTML = (isCur(to) ? fmtMoney(res, to) : fmt(res, 4) + " <small>" + unitLabel(to) + "</small>");
+  out.innerHTML = (isCur(to) ? fmtMoney(res, to) : fmt(res, 4) + " <small>" + unitLabel(to, res) + "</small>");
   const one = convert(1, from, to);
-  rateEl.textContent = "1 " + unitLabel(from) + " = " + (isCur(to) ? fmtMoney(one, to) : fmt(one, 4) + " " + unitLabel(to));
+  rateEl.textContent = "1 " + unitLabel(from, 1) + " = " + (isCur(to) ? fmtRate(one, to) : fmt(one, 4) + " " + unitLabel(to, one));
 }
 function renderAll(){ ["fx","gold","xau"].forEach(renderOne); renderLive(); }
 function renderLive(){
@@ -340,6 +352,7 @@ function setLang(l){
   lang = l;
   document.documentElement.lang = l === "zh" ? "zh-Hant" : l;
   document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("option[data-opt]").forEach(o => { o.textContent = (OPT_I18N[lang] || OPT_I18N.id)[o.dataset.opt]; });
   document.querySelectorAll(".lang-switch button").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
   renderAll();
 }
